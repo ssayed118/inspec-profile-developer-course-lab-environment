@@ -48,4 +48,12 @@ Directory]"
   tag fix_id: "F-32887r567476_fix"
   tag cci: ["CCI-001090"]
   tag nist: ["SC-4"]
+
+  world_writable_dirs = command('find / -type d \\( -perm -0002 -a ! -perm -1000 \\) -print 2&gt;/dev/null').stdout.split("\n")
+
+  describe 'List of world writeable directories on this target' do
+    it 'should not have the sticky bit set' do
+      expect(world_writeable_dirs).to be_empty, "List of world writeable directories without the sticky bit set: #{world_writeable_dirs}"
+    end
+  end
 end
